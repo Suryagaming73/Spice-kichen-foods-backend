@@ -67,6 +67,8 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class FoodItemSerializer(serializers.ModelSerializer):
+    category_details = CategorySerializer(source='category', read_only=True)
+    
     class Meta:
         model = FoodItem
         fields = '__all__'
