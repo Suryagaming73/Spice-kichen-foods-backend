@@ -86,7 +86,7 @@ class UserViewSet(viewsets.ModelViewSet):
                     {message.replace(chr(10), '<br>')}
                 </div>
                 <div style="text-align: center; margin-top: 30px;">
-                    <a href="https://spice-kichen-restaurant.vercel.app/" style="display: inline-block; background-color: #ff6b35; color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; font-size: 16px;">Claim Offer Now</a>
+                    <a href="https://spice-kitchen-veg-nonveg.vercel.app/" style="display: inline-block; background-color: #ff6b35; color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; font-size: 16px;">Claim Offer Now</a>
                 </div>
             </div>
             <div style="background-color: #f1f5f9; padding: 15px; text-align: center; color: #64748b; font-size: 12px;">
@@ -97,7 +97,7 @@ class UserViewSet(viewsets.ModelViewSet):
         """
 
         try:
-            plain_message = f"Special Offer from Spice Kitchen!\n\n{subject}\n\n{message}\n\nClaim Offer Now at: https://spice-kichen-restaurant.vercel.app/"
+            plain_message = f"Special Offer from Spice Kitchen!\n\n{subject}\n\n{message}\n\nClaim Offer Now at: https://spice-kitchen-veg-nonveg.vercel.app/"
             send_mail(
                 subject=f"Spice Kitchen: {subject}",
                 message=plain_message,
@@ -143,14 +143,14 @@ class UserViewSet(viewsets.ModelViewSet):
                             <p style="margin: 0;">Password: <strong>{raw_password}</strong></p>
                         </div>
                         <p style="font-size: 16px;">For your security, you can change your password at any time.</p>
-                        <a href="https://spice-kichen-restaurant.vercel.app/auth" style="display: inline-block; background-color: #ff6b35; color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; margin-top: 15px;">Order Now</a>
+                        <a href="https://spice-kitchen-veg-nonveg.vercel.app/auth" style="display: inline-block; background-color: #ff6b35; color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; margin-top: 15px;">Order Now</a>
                     </div>
                     <div style="background-color: #f1f5f9; padding: 15px; text-align: center; color: #64748b; font-size: 12px;">
                         <p style="margin: 0;">&copy; {datetime.datetime.now().year if 'datetime' in globals() else 2024} Spice Kitchen. All rights reserved.</p>
                     </div>
                 </div>
                 """
-                plain_message = f"Hi {user.first_name},\n\nWelcome to Spice Kitchen! Your account has been successfully created.\n\nYour Login Credentials:\nEmail: {user.email}\nPassword: {raw_password}\n\nOrder Now: https://spice-kichen-restaurant.vercel.app/auth"
+                plain_message = f"Hi {user.first_name},\n\nWelcome to Spice Kitchen! Your account has been successfully created.\n\nYour Login Credentials:\nEmail: {user.email}\nPassword: {raw_password}\n\nOrder Now: https://spice-kitchen-veg-nonveg.vercel.app/auth"
                 send_mail(
                     subject='Welcome to Spice Kitchen!',
                     message=plain_message,
