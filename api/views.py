@@ -229,6 +229,8 @@ class GoogleLoginView(APIView):
             first_name = idinfo.get('given_name', '')
             last_name = idinfo.get('family_name', '')
 
+            picture = idinfo.get('picture', '')
+
             user, created = User.objects.get_or_create(
                 username=email,
                 defaults={
@@ -237,6 +239,18 @@ class GoogleLoginView(APIView):
                     'last_name': last_name
                 }
             )
+
+            # Fetch and save Google profile picture
+            if picture and not user.profile.avatar_url:
+                import urllib.request
+                from django.core.files.base import ContentFile
+                try:
+                    img_response = requests.get(picture)
+                    if img_response.status_code == 200:
+                        file_name = f"{user.id}_google_avatar.jpg"
+                        user.profile.avatar_url.save(file_name, ContentFile(img_response.content), save=True)
+                except Exception as e:
+                    logger.error(f"Failed to fetch Google picture: {e}")
 
             refresh = RefreshToken.for_user(user)
 
