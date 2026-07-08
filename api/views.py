@@ -67,8 +67,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
         html_message = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            <div style="background-color: #ff4757; padding: 20px; text-align: center;">
-                <h1 style="color: #fff; margin: 0;">Special Offer from Spice Kitchen! 🌶️</h1>
+            <div style="background-color: #ff6b35; padding: 20px; text-align: center;">
+                <img src="https://spice-kichen-restaurant.vercel.app/favicon.svg" alt="Spice Kitchen Logo" style="width: 48px; height: 48px; margin-bottom: 10px;">
+                <h1 style="color: #fff; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Spice Kitchen</h1>
+                <p style="color: #fff; margin: 5px 0 0 0; opacity: 0.9;">Special Offer! 🌶️</p>
             </div>
             <div style="padding: 30px; color: #333; line-height: 1.6;">
                 {image_html}
@@ -77,7 +79,7 @@ class UserViewSet(viewsets.ModelViewSet):
                     {message.replace(chr(10), '<br>')}
                 </div>
                 <div style="text-align: center; margin-top: 30px;">
-                    <a href="https://spice-kichen-restaurant.vercel.app/" style="display: inline-block; background-color: #ff4757; color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; font-size: 16px;">Claim Offer Now</a>
+                    <a href="https://spice-kichen-restaurant.vercel.app/" style="display: inline-block; background-color: #ff6b35; color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; font-size: 16px;">Claim Offer Now</a>
                 </div>
             </div>
             <div style="background-color: #f1f5f9; padding: 15px; text-align: center; color: #64748b; font-size: 12px;">
@@ -112,19 +114,21 @@ class UserViewSet(viewsets.ModelViewSet):
                 raw_password = request.data.get('password')
                 html_message = f"""
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <div style="background-color: #ff4757; padding: 20px; text-align: center;">
-                        <h1 style="color: #fff; margin: 0;">Welcome to Spice Kitchen! 🌶️</h1>
+                    <div style="background-color: #ff6b35; padding: 20px; text-align: center;">
+                        <img src="https://spice-kichen-restaurant.vercel.app/favicon.svg" alt="Spice Kitchen Logo" style="width: 48px; height: 48px; margin-bottom: 10px;">
+                        <h1 style="color: #fff; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Spice Kitchen</h1>
+                        <p style="color: #fff; margin: 5px 0 0 0; opacity: 0.9;">Welcome to our family! 🌶️</p>
                     </div>
                     <div style="padding: 30px; color: #333;">
                         <p style="font-size: 16px;">Hi {user.first_name},</p>
                         <p style="font-size: 16px;">Thank you for registering. Your account has been successfully created. You can now order authentic Indian cuisine directly to your doorstep.</p>
-                        <div style="background-color: #f8f9fa; border-left: 4px solid #ff4757; padding: 15px; margin: 20px 0;">
+                        <div style="background-color: #f8f9fa; border-left: 4px solid #ff6b35; padding: 15px; margin: 20px 0;">
                             <p style="margin: 0 0 10px 0;"><strong>Your Login Credentials:</strong></p>
                             <p style="margin: 0 0 5px 0;">Email: <strong>{user.email}</strong></p>
                             <p style="margin: 0;">Password: <strong>{raw_password}</strong></p>
                         </div>
                         <p style="font-size: 16px;">For your security, you can change your password at any time.</p>
-                        <a href="https://spice-kichen-restaurant.vercel.app/auth" style="display: inline-block; background-color: #ff4757; color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; margin-top: 15px;">Order Now</a>
+                        <a href="https://spice-kichen-restaurant.vercel.app/auth" style="display: inline-block; background-color: #ff6b35; color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; margin-top: 15px;">Order Now</a>
                     </div>
                     <div style="background-color: #f1f5f9; padding: 15px; text-align: center; color: #64748b; font-size: 12px;">
                         <p style="margin: 0;">&copy; {datetime.datetime.now().year if 'datetime' in globals() else 2024} Spice Kitchen. All rights reserved.</p>
