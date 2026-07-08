@@ -67,10 +67,14 @@ class UserViewSet(viewsets.ModelViewSet):
 
         html_message = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            <div style="background-color: #ff6b35; padding: 20px; text-align: center;">
-                <img src="https://spice-kichen-restaurant.vercel.app/favicon.svg" alt="Spice Kitchen Logo" style="width: 48px; height: 48px; margin-bottom: 10px;">
-                <h1 style="color: #fff; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Spice Kitchen</h1>
-                <p style="color: #fff; margin: 5px 0 0 0; opacity: 0.9;">Special Offer! 🌶️</p>
+            <div style="background-color: #1a1a1a; padding: 30px; text-align: center; border-bottom: 4px solid #ff6b35;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                    <img src="https://spice-kichen-restaurant.vercel.app/favicon.svg" alt="Chef Hat" style="width: 36px; height: 36px;">
+                    <div style="font-size: 32px; font-weight: 800; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: -0.5px;">
+                        <span style="color: #fff;">Spice</span><span style="color: #ff6b35;">KITCHEN</span>
+                    </div>
+                </div>
+                <p style="color: #ff6b35; margin: 0; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Special Offer! 🌶️</p>
             </div>
             <div style="padding: 30px; color: #333; line-height: 1.6;">
                 {image_html}
@@ -114,10 +118,14 @@ class UserViewSet(viewsets.ModelViewSet):
                 raw_password = request.data.get('password')
                 html_message = f"""
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <div style="background-color: #ff6b35; padding: 20px; text-align: center;">
-                        <img src="https://spice-kichen-restaurant.vercel.app/favicon.svg" alt="Spice Kitchen Logo" style="width: 48px; height: 48px; margin-bottom: 10px;">
-                        <h1 style="color: #fff; margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Spice Kitchen</h1>
-                        <p style="color: #fff; margin: 5px 0 0 0; opacity: 0.9;">Welcome to our family! 🌶️</p>
+                    <div style="background-color: #1a1a1a; padding: 30px; text-align: center; border-bottom: 4px solid #ff6b35;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                            <img src="https://spice-kichen-restaurant.vercel.app/favicon.svg" alt="Chef Hat" style="width: 36px; height: 36px;">
+                            <div style="font-size: 32px; font-weight: 800; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: -0.5px;">
+                                <span style="color: #fff;">Spice</span><span style="color: #ff6b35;">KITCHEN</span>
+                            </div>
+                        </div>
+                        <p style="color: #ff6b35; margin: 0; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Welcome to our family! 🌶️</p>
                     </div>
                     <div style="padding: 30px; color: #333;">
                         <p style="font-size: 16px;">Hi {user.first_name},</p>
