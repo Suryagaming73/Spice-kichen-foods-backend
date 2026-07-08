@@ -68,12 +68,15 @@ class UserViewSet(viewsets.ModelViewSet):
         html_message = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
             <div style="background-color: #1a1a1a; padding: 30px; text-align: center; border-bottom: 4px solid #ff6b35;">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;">
-                    <img src="https://spice-kichen-restaurant.vercel.app/favicon.svg" alt="Chef Hat" style="width: 36px; height: 36px;">
-                    <div style="font-size: 32px; font-weight: 800; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: -0.5px;">
-                        <span style="color: #fff;">Spice</span><span style="color: #ff6b35;">KITCHEN</span>
-                    </div>
-                </div>
+                <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                        <td align="center" style="padding-bottom: 15px;">
+                            <span style="font-size: 32px; font-weight: 800; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: -0.5px; display: inline-block; vertical-align: middle;">
+                                <span style="font-size: 36px; margin-right: 8px;">👨‍🍳</span><span style="color: #fff;">Spice</span><span style="color: #ff6b35;">KITCHEN</span>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
                 <p style="color: #ff6b35; margin: 0; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Special Offer! 🌶️</p>
             </div>
             <div style="padding: 30px; color: #333; line-height: 1.6;">
@@ -120,12 +123,15 @@ class UserViewSet(viewsets.ModelViewSet):
                 html_message = f"""
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                     <div style="background-color: #1a1a1a; padding: 30px; text-align: center; border-bottom: 4px solid #ff6b35;">
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;">
-                            <img src="https://spice-kichen-restaurant.vercel.app/favicon.svg" alt="Chef Hat" style="width: 36px; height: 36px;">
-                            <div style="font-size: 32px; font-weight: 800; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: -0.5px;">
-                                <span style="color: #fff;">Spice</span><span style="color: #ff6b35;">KITCHEN</span>
-                            </div>
-                        </div>
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td align="center" style="padding-bottom: 15px;">
+                                    <span style="font-size: 32px; font-weight: 800; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: -0.5px; display: inline-block; vertical-align: middle;">
+                                        <span style="font-size: 36px; margin-right: 8px;">👨‍🍳</span><span style="color: #fff;">Spice</span><span style="color: #ff6b35;">KITCHEN</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
                         <p style="color: #ff6b35; margin: 0; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Welcome to our family! 🌶️</p>
                     </div>
                     <div style="padding: 30px; color: #333;">
