@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (
 )
 from .views import (
     UserViewSet, CategoryViewSet, FoodItemViewSet,
-    OrderViewSet, ReviewViewSet, HotelSettingViewSet
+    OrderViewSet, ReviewViewSet, HotelSettingViewSet, GoogleLoginView
 )
 
 router = DefaultRouter()
@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/google/', GoogleLoginView.as_view(), name='google_login'),
 ]

@@ -1,13 +1,21 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import User
+import requests
+from rest_framework_simplejwt.tokens import RefreshToken
+import logging
+import os
+
 from .models import UserProfile, Category, FoodItem, Order, Review, HotelSetting
 from .serializers import (
     UserSerializer, RegisterSerializer, CategorySerializer,
     FoodItemSerializer, OrderSerializer, ReviewSerializer, HotelSettingSerializer
 )
 
+logger = logging.getLogger(__name__)
 class IsAdminUserOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
@@ -77,3 +85,51 @@ class HotelSettingViewSet(viewsets.ModelViewSet):
     queryset = HotelSetting.objects.all()
     serializer_class = HotelSettingSerializer
     permission_classes = [IsAdminUserOrReadOnly]
+
+class GoogleLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        token = request.data.get('token')
+        if not token:
+            return Response({'error': 'Token is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Verify the access token by fetching user info from Google
+            response = requests.get(
+                'https://www.googleapis.com/oauth2/v3/userinfo',
+                headers={'Authorization': f'Bearer {token}'}
+            )
+
+            if response.status_code != 200:
+                logger.error(f"Google UserInfo Error: {response.text}")
+                return Response({'error': 'Invalid or expired Google token'}, status=status.HTTP_400_BAD_REQUEST)
+
+            idinfo = response.json()
+            email = idinfo.get('email')
+            if not email:
+                return Response({'error': 'Google token did not contain an email'}, status=status.HTTP_400_BAD_REQUEST)
+
+            first_name = idinfo.get('given_name', '')
+            last_name = idinfo.get('family_name', '')
+
+            user, created = User.objects.get_or_create(
+                username=email,
+                defaults={
+                    'email': email,
+                    'first_name': first_name,
+                    'last_name': last_name
+                }
+            )
+
+            refresh = RefreshToken.for_user(user)
+
+            return Response({
+                'access': str(refresh.access_token),
+                'refresh': str(refresh),
+                'user': UserSerializer(user).data
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logger.error(f"Google Token Verification Error: {e}")
+            return Response({'error': 'Error verifying token'}, status=status.HTTP_400_BAD_REQUEST)
