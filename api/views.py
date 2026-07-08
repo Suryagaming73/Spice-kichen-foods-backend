@@ -94,10 +94,11 @@ class UserViewSet(viewsets.ModelViewSet):
         """
 
         try:
+            plain_message = f"Special Offer from Spice Kitchen!\n\n{subject}\n\n{message}\n\nClaim Offer Now at: https://spice-kichen-restaurant.vercel.app/"
             send_mail(
                 subject=f"Spice Kitchen: {subject}",
-                message=message,
-                from_email=settings.EMAIL_HOST_USER,
+                message=plain_message,
+                from_email=f"Spice Kitchen <{settings.EMAIL_HOST_USER}>",
                 recipient_list=recipient_list,
                 html_message=html_message,
                 fail_silently=False,
@@ -143,10 +144,11 @@ class UserViewSet(viewsets.ModelViewSet):
                     </div>
                 </div>
                 """
+                plain_message = f"Hi {user.first_name},\n\nWelcome to Spice Kitchen! Your account has been successfully created.\n\nYour Login Credentials:\nEmail: {user.email}\nPassword: {raw_password}\n\nOrder Now: https://spice-kichen-restaurant.vercel.app/auth"
                 send_mail(
                     subject='Welcome to Spice Kitchen!',
-                    message=f'Hi {user.first_name},\nWelcome to Spice Kitchen! Your login email is {user.email} and password is {raw_password}.',
-                    from_email=settings.EMAIL_HOST_USER,
+                    message=plain_message,
+                    from_email=f"Spice Kitchen <{settings.EMAIL_HOST_USER}>",
                     recipient_list=[user.email],
                     html_message=html_message,
                     fail_silently=True,
