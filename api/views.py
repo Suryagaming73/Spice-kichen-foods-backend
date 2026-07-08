@@ -18,6 +18,7 @@ from .serializers import (
 )
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.files.storage import default_storage
 
 logger = logging.getLogger(__name__)
 class IsAdminUserOrReadOnly(permissions.BasePermission):
@@ -55,12 +56,22 @@ class UserViewSet(viewsets.ModelViewSet):
         users = User.objects.exclude(email='')
         recipient_list = [user.email for user in users]
 
+        # Handle image upload
+        image = request.FILES.get('image')
+        image_html = ""
+        if image:
+            # Save the image using default storage
+            file_name = default_storage.save(f'offers/{image.name}', image)
+            file_url = request.build_absolute_uri(default_storage.url(file_name))
+            image_html = f'<div style="text-align: center; margin-bottom: 20px;"><img src="{file_url}" alt="Offer Image" style="max-width: 100%; border-radius: 8px;"></div>'
+
         html_message = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
             <div style="background-color: #ff4757; padding: 20px; text-align: center;">
                 <h1 style="color: #fff; margin: 0;">Special Offer from Spice Kitchen! 🌶️</h1>
             </div>
             <div style="padding: 30px; color: #333; line-height: 1.6;">
+                {image_html}
                 <h2 style="color: #1a1a1a; margin-top: 0;">{subject}</h2>
                 <div style="font-size: 16px;">
                     {message.replace(chr(10), '<br>')}
