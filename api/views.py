@@ -8,12 +8,16 @@ import requests
 from rest_framework_simplejwt.tokens import RefreshToken
 import logging
 import os
+import datetime
 
-from .models import UserProfile, Category, FoodItem, Order, Review, HotelSetting
+from .models import UserProfile, Category, FoodItem, Order, Review, HotelSetting, ContactMessage
 from .serializers import (
     UserSerializer, RegisterSerializer, CategorySerializer,
-    FoodItemSerializer, OrderSerializer, ReviewSerializer, HotelSettingSerializer
+    FoodItemSerializer, OrderSerializer, ReviewSerializer, HotelSettingSerializer,
+    ContactMessageSerializer
 )
+from django.core.mail import send_mail
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 class IsAdminUserOrReadOnly(permissions.BasePermission):
@@ -41,11 +45,92 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({'avatar_url': profile.avatar_url.url}, status=status.HTTP_200_OK)
         return Response({'error': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
 
+    @action(detail=False, methods=['post'], permission_classes=[IsAdminUserOrReadOnly])
+    def send_offer(self, request):
+        subject = request.data.get('subject')
+        message = request.data.get('message')
+        if not subject or not message:
+            return Response({'error': 'Subject and message are required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        users = User.objects.exclude(email='')
+        recipient_list = [user.email for user in users]
+
+        html_message = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <div style="background-color: #ff4757; padding: 20px; text-align: center;">
+                <h1 style="color: #fff; margin: 0;">Special Offer from Spice Kitchen! 🌶️</h1>
+            </div>
+            <div style="padding: 30px; color: #333; line-height: 1.6;">
+                <h2 style="color: #1a1a1a; margin-top: 0;">{subject}</h2>
+                <div style="font-size: 16px;">
+                    {message.replace(chr(10), '<br>')}
+                </div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="https://spice-kichen-restaurant.vercel.app/" style="display: inline-block; background-color: #ff4757; color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 6px; font-weight: bold; font-size: 16px;">Claim Offer Now</a>
+                </div>
+            </div>
+            <div style="background-color: #f1f5f9; padding: 15px; text-align: center; color: #64748b; font-size: 12px;">
+                <p style="margin: 0;">&copy; {datetime.datetime.now().year if 'datetime' in globals() else 2024} Spice Kitchen. All rights reserved.</p>
+                <p style="margin: 5px 0 0 0;">You are receiving this email because you registered on our platform.</p>
+            </div>
+        </div>
+        """
+
+        try:
+            send_mail(
+                subject=f"Spice Kitchen: {subject}",
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=recipient_list,
+                html_message=html_message,
+                fail_silently=False,
+            )
+            return Response({'message': f'Offer sent to {len(recipient_list)} users.'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error(f"Failed to send offer email: {e}")
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
     def register(self, request):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            
+            # Send welcome email
+            try:
+                raw_password = request.data.get('password')
+                html_message = f"""
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <div style="background-color: #ff4757; padding: 20px; text-align: center;">
+                        <h1 style="color: #fff; margin: 0;">Welcome to Spice Kitchen! 🌶️</h1>
+                    </div>
+                    <div style="padding: 30px; color: #333;">
+                        <p style="font-size: 16px;">Hi {user.first_name},</p>
+                        <p style="font-size: 16px;">Thank you for registering. Your account has been successfully created. You can now order authentic Indian cuisine directly to your doorstep.</p>
+                        <div style="background-color: #f8f9fa; border-left: 4px solid #ff4757; padding: 15px; margin: 20px 0;">
+                            <p style="margin: 0 0 10px 0;"><strong>Your Login Credentials:</strong></p>
+                            <p style="margin: 0 0 5px 0;">Email: <strong>{user.email}</strong></p>
+                            <p style="margin: 0;">Password: <strong>{raw_password}</strong></p>
+                        </div>
+                        <p style="font-size: 16px;">For your security, you can change your password at any time.</p>
+                        <a href="https://spice-kichen-restaurant.vercel.app/auth" style="display: inline-block; background-color: #ff4757; color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; margin-top: 15px;">Order Now</a>
+                    </div>
+                    <div style="background-color: #f1f5f9; padding: 15px; text-align: center; color: #64748b; font-size: 12px;">
+                        <p style="margin: 0;">&copy; {datetime.datetime.now().year if 'datetime' in globals() else 2024} Spice Kitchen. All rights reserved.</p>
+                    </div>
+                </div>
+                """
+                send_mail(
+                    subject='Welcome to Spice Kitchen!',
+                    message=f'Hi {user.first_name},\nWelcome to Spice Kitchen! Your login email is {user.email} and password is {raw_password}.',
+                    from_email=settings.EMAIL_HOST_USER,
+                    recipient_list=[user.email],
+                    html_message=html_message,
+                    fail_silently=True,
+                )
+            except Exception as e:
+                logger.error(f"Failed to send welcome email: {e}")
+
             return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -133,3 +218,9 @@ class GoogleLoginView(APIView):
         except Exception as e:
             logger.error(f"Google Token Verification Error: {e}")
             return Response({'error': 'Error verifying token'}, status=status.HTTP_400_BAD_REQUEST)
+
+class ContactMessageViewSet(viewsets.ModelViewSet):
+    queryset = ContactMessage.objects.all().order_by('-created_at')
+    serializer_class = ContactMessageSerializer
+    permission_classes = [permissions.AllowAny] # Allow anyone to submit a contact message
+

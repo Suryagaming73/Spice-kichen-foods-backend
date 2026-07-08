@@ -82,13 +82,15 @@ class Order(models.Model):
 
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
-    food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE, related_name='reviews')
+    food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE, related_name='reviews', null=True, blank=True)
     rating = models.IntegerField()
     comment = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'food_item')
+        # unique_together cannot be used if food_item can be null because it restricts users to 1 general review. 
+        # We'll just order by created_at.
+        ordering = ['-created_at']
 
     def __str__(self):
         return f"Review by {self.user} for {self.food_item}"
@@ -115,3 +117,14 @@ class HotelSetting(models.Model):
 
     def __str__(self):
         return self.hotel_name
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+    order_id = models.CharField(max_length=100, blank=True, null=True)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Message from {self.name} ({self.email})"
+

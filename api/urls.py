@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (
 )
 from .views import (
     UserViewSet, CategoryViewSet, FoodItemViewSet,
-    OrderViewSet, ReviewViewSet, HotelSettingViewSet, GoogleLoginView
+    OrderViewSet, ReviewViewSet, HotelSettingViewSet, GoogleLoginView, ContactMessageViewSet
 )
 
 router = DefaultRouter()
@@ -16,6 +16,7 @@ router.register(r'food-items', FoodItemViewSet)
 router.register(r'orders', OrderViewSet)
 router.register(r'reviews', ReviewViewSet)
 router.register(r'settings', HotelSettingViewSet)
+router.register(r'contact', ContactMessageViewSet, basename='contact')
 
 urlpatterns = [
     path('', include(router.urls)),

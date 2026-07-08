@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UserProfile, Category, FoodItem, Order, Review, HotelSetting
+from .models import UserProfile, Category, FoodItem, Order, Review, HotelSetting, ContactMessage
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -93,3 +93,9 @@ class HotelSettingSerializer(serializers.ModelSerializer):
     class Meta:
         model = HotelSetting
         fields = '__all__'
+
+class ContactMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactMessage
+        fields = '__all__'
+
