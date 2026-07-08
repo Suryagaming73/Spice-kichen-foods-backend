@@ -33,17 +33,19 @@ class UserSerializer(serializers.ModelSerializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    full_name = serializers.CharField(write_only=True, required=False)
+    first_name = serializers.CharField(write_only=True, required=False)
+    last_name = serializers.CharField(write_only=True, required=False)
     phone = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'full_name', 'phone']
+        fields = ['email', 'password', 'first_name', 'last_name', 'phone']
 
     def create(self, validated_data):
         email = validated_data['email']
         password = validated_data['password']
-        full_name = validated_data.get('full_name', '')
+        first_name = validated_data.get('first_name', '')
+        last_name = validated_data.get('last_name', '')
         phone = validated_data.get('phone', '')
 
         # Use email as username
@@ -51,7 +53,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=email,
             email=email,
             password=password,
-            first_name=full_name
+            first_name=first_name,
+            last_name=last_name
         )
         
         # Profile is created by signal, update it
